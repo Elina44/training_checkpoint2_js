@@ -1,25 +1,44 @@
 import React from "react";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import Game from "./Game";
 
 
+
 function GameList (props) {
+    const [games, setGames] = useState([""]);
+    const [maxRating, setMaxRating] = useState();
+
     useEffect (() => {
         axios
-        .get("/wild-games/games/")
+        .get("https://apis.wilders.dev/wild-games/games")
         .then((reponse) => reponse.data)
-        .then((data) => {props(data.result)});
-    }, [])
+        .then((data) => setGames(data));
+    }, []);
+
+    function handleClick (){
+        setMaxRating(!maxRating)
+    }
 
     return (
-        {props.val && props.val
-        .map((val, index) => (
-            <Game 
-            {...val}
-            key={index}/>
-        ))}
+        <div>
+            <button onClick={handleClick}>
+            Show only failed results:
+            </button>
+            <ul>
+                {games && games
+                .filter((e) => e.game.rating >= 4.5 ? <Game /> : "" || !setMaxRating)
+                }
+                .map((game, index) => (
+                <li> <Game 
+                    game={game}
+                    key={index}/>
+                ))}
+                </li>
+            </ul>
+        </div>
     )
 }
+
 
 export default GameList;
