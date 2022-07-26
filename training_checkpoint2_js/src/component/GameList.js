@@ -5,9 +5,9 @@ import Game from "./Game";
 
 
 
-function GameList (props) {
+function GameList () {
     const [games, setGames] = useState([""]);
-    const [maxRating, setMaxRating] = useState();
+    const [maxRating, setMaxRating] = useState(false);
 
     useEffect (() => {
         axios
@@ -23,19 +23,15 @@ function GameList (props) {
     return (
         <div>
             <button onClick={handleClick}>
-            Show only failed results:
+            Show only failed results: 
             </button>
-            <ul>
                 {games && games
-                .filter((e) => e.game.rating >= 4.5 ? <Game /> : "" || !setMaxRating)
+                .filter((game) => !maxRating || game.rating > 4.5)
+                .map(game => (
+                <Game 
+                    key={game.id} game={game} />
+                ))
                 }
-                .map((game, index) => (
-                <li> <Game 
-                    game={game}
-                    key={index}/>
-                ))}
-                </li>
-            </ul>
         </div>
     )
 }
