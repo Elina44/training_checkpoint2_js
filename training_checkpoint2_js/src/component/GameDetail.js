@@ -4,7 +4,7 @@ import axios from 'axios';
 
 function GameDetail (){
     const {id} = useParams();
-    const[gameDetails, setGameDetails] = useState([]);
+    const [gameDetails, setGameDetails] = useState([]);
 
     useEffect(() => {
         axios
